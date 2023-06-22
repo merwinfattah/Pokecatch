@@ -15,7 +15,7 @@ export const Layout = ({ children }: any) => {
             <header>
                 <Navbar />
             </header>
-            <main className={` bg-white h-full p-[10px]`}>
+            <main className={` bg-white  p-[10px]`}>
                 {children}
             </main>
         </React.Fragment>

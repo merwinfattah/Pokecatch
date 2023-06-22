@@ -37,23 +37,26 @@ export default function Home() {
   
   return (
     <Layout>
+      <section >
         <Divider orientation="left" style={{ fontSize: '18px' }}>Pokemon List</Divider>
-        <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px]`}>
-        {visiblePokemons.map((pokemon: any, index: number) => {
-          const pokemonIndex = startIndex + index + 1;
-          return (
-            <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
-          );
-        })}
+          <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px]`}>
+          {visiblePokemons.map((pokemon: any, index: number) => {
+            const pokemonIndex = startIndex + index + 1;
+            return (
+              <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
+            );
+          })}
+          </div>
+          <div className={`flex justify-center mt-[20px]`}>
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={pokemons.length}
+              onChange={handlePageChange}
+            />
         </div>
-        <div className={`flex justify-center mt-[20px]`}>
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={pokemons.length}
-            onChange={handlePageChange}
-          />
-        </div>
+      </section>
+       
         
     </Layout>
   )
