@@ -15,7 +15,7 @@ export const PokeCard = ({name, image, id}: PokeCardProps) => {
             <Card
                 hoverable
                 style={{ width: 240 }}
-                cover={<Image alt={`gambar-${id}`} src={image} />}
+                cover={<Image alt={`gambar-${id}`} src={image} width={300} height={300} />}
             >
                 <Card.Meta title={name} description={`ID: ${id}`} />
             </Card>

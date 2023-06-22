@@ -7,9 +7,6 @@ export const Navbar = () => {
                 <Link href="/">
                     Home
                 </Link>
-                <Link href="/pokemon-detail">
-                    Pokemon Detail
-                </Link>
                 <Link href="/my-pokemon">
                     My Pokemon
                 </Link>
