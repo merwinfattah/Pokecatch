@@ -1,9 +1,11 @@
-PokeCatch
+## PokeCatch
 A web application that lets you catch the Pokemon that you want and save it to your collections, you can also release it from your collections later.
 
 ## Set up and Run
 First, clone the PokeCatch repository to your local machine:
+```bash
 git clone https://github.com/merwinfattah/Pokecatch
+```
 
 then, run the development server:
 ```bash
