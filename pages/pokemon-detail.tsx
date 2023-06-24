@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Layout } from '@/components/Layout';
 import Image from 'next/image';
 import Link from "next/link";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PokemonDetailProps from '@/interfaces/PokemonDetailProps';
 import { addToInventory } from '@/redux/inventoryReducer';
 
@@ -12,6 +12,7 @@ import { addToInventory } from '@/redux/inventoryReducer';
 export default function PokemonDetail() {
     const router = useRouter()
     const dispatch = useDispatch()
+    const { inventory } = useSelector((state: any) => state.inventory)
     const { id } = router.query
     const [pokemon, setPokemon] = useState<PokemonDetailProps>({
         id: 0,
@@ -85,36 +86,42 @@ export default function PokemonDetail() {
     }, [id])
 
     const catchPokemon = async () => {
-        const isSuccessful = Math.random() < 0.5
-        if (isSuccessful) {
-            dispatch(addToInventory({id: pokemon.id, name: pokemon.name}))
-            alert('Pokemon catched')
-        }
-        else {
-            alert('Failed to catch pokemon')
+        const inventoryNames = inventory.map( (item: { id: number; name: string }) => item.name);
+        if (inventoryNames.includes(pokemon.name)) {
+            alert('You are already owned this pokemon. Try to catch another pokemon')
+        } else {
+            const isSuccessful = Math.random() < 0.5
+            if (isSuccessful) {
+                dispatch(addToInventory({id: pokemon.id, name: pokemon.name}))
+                alert('Pokemon catched')
+            }
+            else {
+                alert('Failed to catch pokemon')
+            }
+
         }
     }
 
     return(
         <Layout>
-        <article className={`flex flex-col gap-4 `}>
-            <section className={`flex   justify-center items-center py-[30px] `}>
-                <Link href='/' className={`absolute left-36 hover:underline`} >Back</Link>
+        <article className={`flex flex-col gap-4  min-h-screen `}>
+            <section className={`flex   justify-center items-center py-[30px]  `}>
+                <Link href='/' className={`absolute left-36 hover:underline hidden lg:block`} >Back</Link>
                 <h1 className={`text-4xl font-bold capitalize`}>{pokemon.name}</h1>
             </section>
-            <section className={`flex  justify-center items-center   pt-[10px]`}>
-                <div className={`w-1/3`}>
-                    <div className={`border fixed top-[240px] left-[150px] rounded flex flex-col justify-center items-center`}> 
-                        <div className={`border-b p-[10px] `}>
+            <section className={`grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-[20px]   pt-[10px] `}>
+                <div >
+                    <div className={`border rounded flex flex-col justify-center items-center`}> 
+                        <div >
                             <Image alt={`gambar-${id}`} src={`/pokemon/${id}.png`} width={300} height={300} />
                         </div>
-                        <button onClick={catchPokemon} className={`bg-red-500 my-[10px] flex justify-center items-center rounded-full p-[10px] text-white w-[50px] h-[50px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
+                        <button onClick={catchPokemon} className={`bg-red-500 mt-[10px] mb-[30px] flex justify-center items-center rounded-full p-[10px] text-white w-[70px] h-[70px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
                     </div>
                     
                 </div>
-                <div className={`w-2/3 `}>
+                <div className={`col-span-2`}>
                     <h2 className={`text-3xl font-bold`}>Information</h2>
-                    <div className={`border p-[16px] rounded mt-[5px]`}>
+                    <div className={`mt-[5px]`}>
                         <h2 className={`text-2xl font-bold`}>Types</h2>
                         <div className={`flex flex-wrap gap-4 mt-[5px]`}>
                             {pokemon.types.map((type, index) => {
@@ -165,9 +172,9 @@ export default function PokemonDetail() {
                                 )}
                             </div>
                         </div>
-                        <div className={`mt-4`}>
+                        <div className={`mt-4 `}>
                             <h2 className={`text-2xl font-bold`}>Moves</h2>
-                            <div className={`flex flex-wrap gap-4 mt-[5px]`}>
+                            <div className={`flex flex-wrap gap-4 mt-[5px] `}>
                                 {pokemon.moves.map((move, index) => {
                                     return (
                                         <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]` }>

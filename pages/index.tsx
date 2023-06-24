@@ -47,28 +47,32 @@ export default function Home() {
   
   return (
     <Layout>
-      <section className={``}>
+      <section className={`min-h-screen `} >
+        <h1 className={`text-4xl font-semibold text-center`}>Catch Your Pokemon!</h1>
         <Divider orientation="left" style={{ fontSize: '18px' }}>Pokemon List</Divider>
         {isLoading ? 
           <div className="flex justify-center items-center h-screen">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
           </div> :
-          <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px]`}>
-          {visiblePokemons.map((pokemon: any, index: number) => {
-            const pokemonIndex = startIndex + index + 1;
-            return (
-              <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
-            );
-          })}
-          </div> }
-          <div className={`flex justify-center mt-[20px]`}>
-            <Pagination
-              current={currentPage}
-              pageSize={pageSize}
-              total={pokemons.length}
-              onChange={handlePageChange}
-            />
-        </div>
+          <>
+            <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px] `}>
+              {visiblePokemons.map((pokemon: any, index: number) => {
+                const pokemonIndex = startIndex + index + 1;
+                return (
+                  <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
+                );
+              })}
+            </div> 
+            <div className={`flex justify-center mt-[20px]`}>
+              <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={pokemons.length}
+                onChange={handlePageChange}
+              />
+            </div>
+          </>}
+          
       </section>    
     </Layout>
   )
