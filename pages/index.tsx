@@ -9,19 +9,27 @@ export default function Home() {
   const [pokemons, setPokemons] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPokemon = async () => {
-    const offset = (currentPage - 1) * pageSize;
-    const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1000');
-    console.log(data)
-    setPokemons(data.results)
+    setIsLoading(true)
+    try {
+      const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1000');
+      console.log(data)
+      setPokemons(data.results)
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+   
   
   }
 
   useEffect(() => {
     fetchPokemon()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize])
+  }, [])
 
   const handlePageChange = (page: number, pageSize?: number) => {
     setCurrentPage(page);
@@ -31,14 +39,20 @@ export default function Home() {
     }
   };
 
+  
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const visiblePokemons = pokemons.slice(startIndex, endIndex);
   
   return (
     <Layout>
-      <section >
+      <section className={``}>
         <Divider orientation="left" style={{ fontSize: '18px' }}>Pokemon List</Divider>
+        {isLoading ? 
+          <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+          </div> :
           <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px]`}>
           {visiblePokemons.map((pokemon: any, index: number) => {
             const pokemonIndex = startIndex + index + 1;
@@ -46,7 +60,7 @@ export default function Home() {
               <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
             );
           })}
-          </div>
+          </div> }
           <div className={`flex justify-center mt-[20px]`}>
             <Pagination
               current={currentPage}
@@ -55,9 +69,7 @@ export default function Home() {
               onChange={handlePageChange}
             />
         </div>
-      </section>
-       
-        
+      </section>    
     </Layout>
   )
 }
