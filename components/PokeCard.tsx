@@ -2,13 +2,7 @@ import React from 'react';
 import {Card} from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface PokeCardProps {
-    name: string;
-    image: string;
-    id: number;
-}
-
+import {PokeCardProps} from '@/interfaces/PokeCardProps';
 
 export const PokeCard = ({name, image, id}: PokeCardProps) => {
     return (

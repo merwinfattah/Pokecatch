@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { removeFromInventory } from '@/redux/inventoryReducer';
 
 
+
 export default function MyPokemon() {
     const dispatch = useDispatch()
     const [ownedPokemons, setOwnedPokemons] = useState([])
