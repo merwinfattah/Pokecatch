@@ -93,7 +93,7 @@ export default function PokemonDetail() {
             const isSuccessful = Math.random() < 0.5
             if (isSuccessful) {
                 dispatch(addToInventory({id: pokemon.id, name: pokemon.name}))
-                alert('Pokemon catched')
+                alert('Pokemon caught successfully')
             }
             else {
                 alert('Failed to catch pokemon')
