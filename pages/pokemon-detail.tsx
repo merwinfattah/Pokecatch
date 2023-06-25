@@ -71,11 +71,17 @@ export default function PokemonDetail() {
         ]
 
     })
-
+    const [isLoading, setIsLoading] = useState(false);
     const fetchPokemon = async () => {
-        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
-        setPokemon(res.data)
-        console.log(res.data)
+        setIsLoading(true)
+        try {
+            const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+            setPokemon(res.data)
+            setIsLoading(false)
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -105,90 +111,98 @@ export default function PokemonDetail() {
     return(
         <Layout>
         <article className={`flex flex-col gap-4  min-h-screen `}>
-            <section className={`flex   justify-center items-center py-[30px]  `}>
-                <Link href='/' className={`absolute left-36 hover:underline hidden lg:block`} >Back</Link>
-                <h1 className={`text-4xl font-bold capitalize`}>{pokemon.name}</h1>
-            </section>
-            <section className={`grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-[20px]   pt-[10px] `}>
-                <div >
-                    <div className={`border rounded flex flex-col justify-center items-center`}> 
-                        <div >
-                            <Image alt={`gambar-${id}`} src={`/pokemon/${id}.png`} width={300} height={300} />
+            {isLoading ?  
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+            </div> 
+            : 
+            <>
+                <section className={`flex   justify-center items-center py-[30px]  `}>
+                    <Link href='/' className={`absolute left-36 hover:underline hidden lg:block`} >Back</Link>
+                    <h1 className={`text-4xl font-bold capitalize`}>{pokemon.name}</h1>
+                </section>
+                <section className={`grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-[20px]   pt-[10px] `}>
+                    <div >
+                        <div className={`border rounded flex flex-col justify-center items-center`}> 
+                            <div >
+                                <Image alt={`gambar-${id}`} src={`/pokemon/${id}.png`} width={300} height={300} />
+                            </div>
+                            <button onClick={catchPokemon} className={`bg-red-500 mt-[10px] mb-[30px] flex justify-center items-center rounded-full p-[10px] text-white w-[70px] h-[70px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
                         </div>
-                        <button onClick={catchPokemon} className={`bg-red-500 mt-[10px] mb-[30px] flex justify-center items-center rounded-full p-[10px] text-white w-[70px] h-[70px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
+                        
                     </div>
-                    
-                </div>
-                <div className={`col-span-2`}>
-                    <h2 className={`text-3xl font-bold`}>Information</h2>
-                    <div className={`mt-[5px]`}>
-                        <h2 className={`text-2xl font-bold`}>Types</h2>
-                        <div className={`flex flex-wrap gap-4 mt-[5px]`}>
-                            {pokemon.types.map((type, index) => {
-                                return (
-                                    <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]`}>
-                                        {type.type.name}
+                    <div className={`col-span-2`}>
+                        <h2 className={`text-3xl font-bold`}>Information</h2>
+                        <div className={`mt-[5px]`}>
+                            <h2 className={`text-2xl font-bold`}>Types</h2>
+                            <div className={`flex flex-wrap gap-4 mt-[5px]`}>
+                                {pokemon.types.map((type, index) => {
+                                    return (
+                                        <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]`}>
+                                            {type.type.name}
+                                        </div>
+                                    )
+                                }
+                                )}
+                            </div>
+                            <div className={`mt-4`}>
+                                <h2 className={`text-2xl font-bold`}>Appearence</h2>
+                                <div className={`flex flex-wrap gap-4 mt-[5px]`}>
+                                    <div className={`bg-gray-200 p-2 rounded-md`}>
+                                        Height: {pokemon.height}
                                     </div>
-                                )
-                            }
-                            )}
-                        </div>
-                        <div className={`mt-4`}>
-                            <h2 className={`text-2xl font-bold`}>Appearence</h2>
-                            <div className={`flex flex-wrap gap-4 mt-[5px]`}>
-                                <div className={`bg-gray-200 p-2 rounded-md`}>
-                                    Height: {pokemon.height}
-                                </div>
-                                <div className={`bg-gray-200 p-2 rounded-md`}>
-                                    Weight: {pokemon.weight}
+                                    <div className={`bg-gray-200 p-2 rounded-md`}>
+                                        Weight: {pokemon.weight}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className={`mt-4`}>
-                            <h2 className={`text-2xl font-bold`}>Abilities</h2>
-                            <div className={`flex flex-wrap gap-4 mt-[5px]`}>
-                                {pokemon.abilities.map((ability, index) => {
-                                    return (
-                                        <div key={index} className={`bg-gray-200 p-2 rounded-md`}>
-                                            {ability.ability.name}
-                                        </div>
-                                    )
-                                }
-                                )}
+                            <div className={`mt-4`}>
+                                <h2 className={`text-2xl font-bold`}>Abilities</h2>
+                                <div className={`flex flex-wrap gap-4 mt-[5px]`}>
+                                    {pokemon.abilities.map((ability, index) => {
+                                        return (
+                                            <div key={index} className={`bg-gray-200 p-2 rounded-md`}>
+                                                {ability.ability.name}
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <div className={`mt-4`}>
-                            <h2 className={`text-2xl font-bold`}>Stats</h2>
-                            <div className={`flex flex-wrap gap-4 mt-[5px]`}>
-                                {pokemon.stats.map((stat, index) => {
-                                    return (
-                                        <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]` }>
-                                            <div className={`text-sm font-bold`}>{stat.base_stat}</div>
-                                            {stat.stat.name}
+                            <div className={`mt-4`}>
+                                <h2 className={`text-2xl font-bold`}>Stats</h2>
+                                <div className={`flex flex-wrap gap-4 mt-[5px]`}>
+                                    {pokemon.stats.map((stat, index) => {
+                                        return (
+                                            <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]` }>
+                                                <div className={`text-sm font-bold`}>{stat.base_stat}</div>
+                                                {stat.stat.name}
 
-                                        </div>
-                                    )
-                                }
-                                )}
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <div className={`mt-4 `}>
-                            <h2 className={`text-2xl font-bold`}>Moves</h2>
-                            <div className={`flex flex-wrap gap-4 mt-[5px] `}>
-                                {pokemon.moves.map((move, index) => {
-                                    return (
-                                        <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]` }>
-                                            <div className={`text-sm font-bold`}>{move.move.name}</div>
-                                            
-                                        </div>
-                                    )
-                                }
-                                )}
+                            <div className={`mt-4 `}>
+                                <h2 className={`text-2xl font-bold`}>Moves</h2>
+                                <div className={`flex flex-wrap gap-4 mt-[5px] `}>
+                                    {pokemon.moves.map((move, index) => {
+                                        return (
+                                            <div key={index} className={`bg-gray-200 p-2 rounded-md flex items-center gap-[8px]` }>
+                                                <div className={`text-sm font-bold`}>{move.move.name}</div>
+                                                
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </> }
+            
         </article>
         </Layout>
     )

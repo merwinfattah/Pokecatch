@@ -1,21 +1,23 @@
-import { Layout } from '@/components/Layout'
-import { Divider } from 'antd'
-import { PokeCard } from '@/components/PokeCard'
-import axios from 'axios'
+import { Layout } from '@/components/Layout';
+import { Divider } from 'antd';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Pagination } from 'antd';
+import dynamic from 'next/dynamic';
+
+const PokeCard = dynamic(() => import('@/components/PokeCard').then((module) => module.PokeCard));
+
 
 export default function Home() {
   const [pokemons, setPokemons] = useState([])
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [isLoading, setIsLoading] = useState(false)
 
   const fetchPokemon = async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1000');
-      console.log(data)
       setPokemons(data.results)
       setIsLoading(false)
     } catch (error) {
@@ -31,19 +33,16 @@ export default function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handlePageChange = (page: number, pageSize?: number) => {
-    setCurrentPage(page);
-    console.log(pokemons.length);
+  const handlePageChange = async (page: number, pageSize?: number) => {
+    setCurrentPage(page)
     if (pageSize) {
-      setPageSize(pageSize);
+      setPageSize(pageSize)
     }
   };
 
-  
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const visiblePokemons = pokemons.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const visiblePokemons = pokemons.slice(startIndex, endIndex)
   
   return (
     <Layout>
@@ -57,7 +56,7 @@ export default function Home() {
           <>
             <div className={`flex flex-grow flex-wrap p-[10px] justify-center items-center gap-[10px] `}>
               {visiblePokemons.map((pokemon: any, index: number) => {
-                const pokemonIndex = startIndex + index + 1;
+                const pokemonIndex = startIndex + index + 1
                 return (
                   <PokeCard key={index} name={pokemon.name} image={`/pokemon/${pokemonIndex}.png`} id={pokemonIndex} />
                 );

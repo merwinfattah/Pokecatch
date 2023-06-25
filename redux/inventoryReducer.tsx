@@ -3,7 +3,7 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 interface InventoryState {
-    inventory: Array<{ id: number; name: string }>;
+    inventory: Array<{ id: number; name: string }>
   }
 
 const initialState: InventoryState = {
@@ -15,10 +15,10 @@ const inventorySlice = createSlice({
     initialState,
     reducers: {
         addToInventory: (state, action) => {
-            state.inventory.push(action.payload);
+            state.inventory.push(action.payload)
         },
         removeFromInventory: (state, action) => {
-            state.inventory = state.inventory.filter((item) => item.id !== action.payload.id);
+            state.inventory = state.inventory.filter((item) => item.id !== action.payload.id)
         }
 
     }
