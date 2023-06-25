@@ -8,6 +8,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import PokemonDetailProps from '@/interfaces/PokemonDetailProps';
 import { addToInventory } from '@/redux/inventoryReducer';
 
+export const catchPokemon = async (inventory: any, pokemon: PokemonDetailProps, dispatch: any) => {
+    const inventoryNames = inventory.map((item: any) => item.name);
+    if (inventoryNames.includes(pokemon.name)) {
+      alert('You are already owned this pokemon. Try to catch another pokemon');
+    } else {
+      const isSuccessful = Math.random() < 0.5;
+      if (isSuccessful) {
+        dispatch(addToInventory({ id: pokemon.id, name: pokemon.name }));
+        alert('Pokemon caught successfully');
+      } else {
+        alert('Failed to catch pokemon');
+      }
+    }
+  };
 
 export default function PokemonDetail() {
     const router = useRouter()
@@ -91,23 +105,6 @@ export default function PokemonDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
 
-    const catchPokemon = async () => {
-        const inventoryNames = inventory.map( (item: { id: number; name: string }) => item.name);
-        if (inventoryNames.includes(pokemon.name)) {
-            alert('You are already owned this pokemon. Try to catch another pokemon')
-        } else {
-            const isSuccessful = Math.random() < 0.5
-            if (isSuccessful) {
-                dispatch(addToInventory({id: pokemon.id, name: pokemon.name}))
-                alert('Pokemon caught successfully')
-            }
-            else {
-                alert('Failed to catch pokemon')
-            }
-
-        }
-    }
-
     return(
         <Layout>
         <article className={`flex flex-col gap-4  min-h-screen `}>
@@ -127,7 +124,7 @@ export default function PokemonDetail() {
                             <div >
                                 <Image alt={`gambar-${id}`} src={`/pokemon/${id}.png`} width={300} height={300} />
                             </div>
-                            <button onClick={catchPokemon} className={`bg-red-500 mt-[10px] mb-[30px] flex justify-center items-center rounded-full p-[10px] text-white w-[70px] h-[70px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
+                            <button onClick={()=>catchPokemon(inventory, pokemon, dispatch)} className={`bg-red-500 mt-[10px] mb-[30px] flex justify-center items-center rounded-full p-[10px] text-white w-[70px] h-[70px] border hover:bg-white hover:text-red-500 hover:border-red-500`}>Catch</button> 
                         </div>
                         
                     </div>
