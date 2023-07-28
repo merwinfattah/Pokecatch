@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PokemonDetailProps from '@/interfaces/PokemonDetailProps';
 import { addToInventory } from '@/redux/inventoryReducer';
 
-export const catchPokemon = async (inventory: any, pokemon: PokemonDetailProps, dispatch: any) => {
+const catchPokemon = async (inventory: any, pokemon: PokemonDetailProps, dispatch: any) => {
     const inventoryNames = inventory.map((item: any) => item.name);
     if (inventoryNames.includes(pokemon.name)) {
       alert('You are already owned this pokemon. Try to catch another pokemon');
